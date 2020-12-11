@@ -1,5 +1,20 @@
 ### CPU 相关
 
+`w`：查看当前系统的负载
+
+```bash
+[root@xiaojw ~]# w
+ 14:02:34 up 272 days, 17:33,  1 user,  load average: 0.00, 0.03, 0.01
+USER     TTY      FROM             LOGIN@   IDLE   JCPU   PCPU WHAT
+root     pts/0    183.237.175.89   14:02    2.00s  0.26s  0.00s w
+
+# 14:02:34 up 272 days, 17:33,  1 user,  load average: 0.00, 0.03, 0.01
+# 时间         系统运行时间       登录用户数  平均负载（重要！）：1分钟内，5分钟内，15分钟内
+# 平均负载，值越大，说明服务器压力越大；这个值只要不超过服务器的CPU数量即可
+```
+
+
+
 `cat /proc/cupinfo`：查看 CPU 相关的基本信息
 
 ```bash
@@ -32,14 +47,19 @@ power management:
 
 
 
-`top`：
+`top`：显示进程所占的系统资源
 
 ```bash
 top - 07:49:20 up 5 min,  1 user,  load average: 0.00, 0.01, 0.01
+								 # 系统负载
 Tasks:  93 total,   1 running,  92 sleeping,   0 stopped,   0 zombie
+# 进程数
 %Cpu(s):  0.0 us,  0.0 sy,  0.0 ni,100.0 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
+# CPU 使用情况
 KiB Mem :  2914272 total,  2560228 free,   222864 used,   131180 buff/cache
+# 内存使用情况
 KiB Swap:  3145724 total,  3145724 free,        0 used.  2542568 avail Mem
+# 交换分区使用情况
 
   PID USER      PR  NI    VIRT    RES    SHR S %CPU %MEM     TIME+ COMMAND
     1 root      20   0  128012   6596   4140 S  0.0  0.2   0:00.86 systemd
@@ -59,9 +79,10 @@ KiB Swap:  3145724 total,  3145724 free,        0 used.  2542568 avail Mem
    17 root       0 -20       0      0      0 S  0.0  0.0   0:00.00 kintegrityd
    18 root       0 -20       0      0      0 S  0.0  0.0   0:00.00 bioset
    19 root       0 -20       0      0      0 S  0.0  0.0   0:00.00 bioset
-   
 
-# 其中，
+# 按 shift + m：按照内存使用大小排序
+# 按 1：列出所有核CPU的使用状态
+# 按 q：退出
 ```
 
 测试系统负载，参考命令：
@@ -96,16 +117,18 @@ for i in $( seq 0 $(($(cat /proc/cpuinfo | grep processor | wc -l)-1)) );do task
 - 其他：
 
   - `-b`：批处理模式
+  - `top -bn1`：非动态打印系统资源的使用情况
 
 
 
 ### 关于内存
 
-`free`
+`free`：查看内存使用状况
 
 ```bash
 [root@localhost ~]# free -m
               total        used        free      shared  buff/cache   available
+           # 内存总大小   实际使用内存大小 空闲内存大小 共享内存  缓冲/缓存      可使用内存
 Mem:           2845         211        2506           8         127        2488
 Swap:          3071           0        3071
 
@@ -142,3 +165,4 @@ dm-1              0.07         1.63         0.00       2204          0
 
 
 ![image-20201210230231291](C:\Users\xiaoj\AppData\Roaming\Typora\typora-user-images\image-20201210230231291.png)
+

@@ -99,6 +99,7 @@ $ cat sort_t
 8SP7SP6SP4
 6SP4SP9SP7
 
+# -t .：以"."作为分隔符；-k 1：按第一列进行排序
 $ sort -t . -k 1 sort_t
 
 
