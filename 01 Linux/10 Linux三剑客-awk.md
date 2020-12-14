@@ -131,4 +131,58 @@
   $31 = .
   ```
 
+- 取出最大的响应时间
+
+  ```bash
+  $ less nginx.log | awk '{print $(NF-1)}' | sort -nr | head -1
+  86462.600
+  ```
+
+- 取出 `top3` 的响应时间，并打印出对应的接口
+
+  ```bash
+  $ less nginx.log | awk '{print $(NF-1), $7}' | sort -nr | head -3
+  86462.600 /cable
+  77331.425 /cable
+  59394.978 /cable
+  ```
+
+- 取出所有请求的平均
+
+  ```bash
+  $ less nginx.log | awk '{sum+=$(NF-1)}END{print sum/NR}'
+  1082.57
+  ```
+
+- 计算每个接口的平均响应时间，并取出 `top3`
+
+  ```bash
+  $ less nginx.log | awk '{time[$7]+=$(NF-1); count[$7]+=1}END{for(k in time) print time[k]/count[k], k}'| sort -nr | head -3
+  3707.26 /cable
+  5.592 /topics/9524
+  2.19 /topics/8343?locale=en
+  ```
+
+- 计算每个 `URL` 的顶层路由地址所对应的 `QPS`（每秒的请求次数），并打印 `top5` 的顶级路由
+
+  ```bash
+  less nginx.log | 
+    awk '{print $4,$7}' | 
+    sed 's#[?!].*##' |
+    sed -E 's#([^ ]*) *(/[^/]*).*#\1:\2#'  |
+    sort | 
+    awk -F: '
+  {cur=($3*60+$4);}
+  NR==1{min=cur; max=cur;}
+  NR>1{
+  count[$NF]+=1; 
+  if(cur<min) min=cur; 
+  if(cur>max) max=cur;
+  }
+  END{
+  for(k in count) print k,count[k]/(max-min+1)}
+  ' | 
+    sort -k2 -nr | head -5
+  ```
+
   
