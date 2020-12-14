@@ -8,3 +8,7 @@
 
 - [Linux系列教程之文本三剑客-awk、grep、sed从入门到实战](https://www.bilibili.com/video/BV1kv411k7ib)
 - [正则表达式](https://www.bilibili.com/video/BV19t4y1y7qP)
+
+#### 线上资料
+
+- [正则表达式](https://www.runoob.com/regexp/regexp-tutorial.html)
