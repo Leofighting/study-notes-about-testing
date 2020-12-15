@@ -185,4 +185,30 @@
     sort -k2 -nr | head -5
   ```
 
+- 每隔1秒统计下 `aliyundun` 的2个进程的 `cpu` 与 内存，分类汇总下 10s 内的平均 `cpu` 与响应时间
+
+  ```bash
+  $ top -b -d 1 -n 10 | grep -i aliyundun | awk '{cpu[$NF]+=$(NF-3);mem[$NF]+=$(NF-2);count[$NF]+=1}END{for(k in cpu) print k, cpu[k]/count[k], mem[k]/count[k]}'
+  AliYunDunUpdate 0 0.1
+  AliYunDun 0.8 1.2
+  ```
+
+- 统计当前服务器上每个监听端口对应的网络状态的数量
+
+  ```bash
+  $ netstat -tn | awk '{print $4, $NF}' | awk -F: '{print $NF}' | sort | uniq -c
+       15 22 ESTABLISHED
+        3 25 TIME_WAIT
+        1 51368 TIME_WAIT
+        1 51374 TIME_WAIT
+        1 51380 TIME_WAIT
+        1 51386 TIME_WAIT
+        1 57968 ESTABLISHED
+        4 9101 TIME_WAIT
+        1 9102 ESTABLISHED
+        1 Local State
+        1 (w/o servers)
+  ```
+
   
+
